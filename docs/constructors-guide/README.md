@@ -181,10 +181,10 @@ a fully custom `main()` that drives `io_init()` / `io_process()` directly.
 - **Voices / outputs** — edit the `tracks[]` array.
 - **LED colours & levels** — `set_led_levels()`, or change the scheme in
   `Machine::render_leds()` (on = colour1, accent = blend, playhead = colour2).
-- **Board quirks** — board-specific remaps are isolated and table-driven:
-  button order `kSwitch[]`/`kDirect[]` (`input.cpp`), LED chain order `led_bit()`
-  (`leds.cpp`), patched pins in `pins.h`. On a correctly-routed board these are
-  identity mappings.
+- **Board wiring** — button order and LED chain order are table-driven and
+  isolated, so you adapt firmware to your board by editing tables, not logic:
+  `kSwitch[]` / `kDirect[]` (`input.cpp`) for buttons, `led_bit()` (`leds.cpp`)
+  for the LED chain, pin assignments in `pins.h`.
 - **Different hardware** — re-implement `lib/hal/*` against your wiring; `lib/core`
   and `lib/machine` stay the same.
 
