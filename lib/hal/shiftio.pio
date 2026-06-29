@@ -1,0 +1,15 @@
+.program shiftio
+.side_set 1
+
+; Full-duplex shift-register bus for the rhythm board.
+;   - side-set bit  = SCLK (shared clock, buffered, non-inverting)
+;   - out pins      = MOSI -> 74595 serial in
+;   - in pins       = MISO <- 74165 serial out
+;
+; SPI mode 0 (CPOL=0, CPHA=0): drive MOSI while clock low, sample MISO on the
+; rising edge. autopull/autopush at 8 bits; one byte per FIFO word, MSB first
+; and left-justified (byte << 24) on TX, byte in low 8 bits on RX.
+.wrap_target
+    out pins, 1   side 0 [1]   ; present MOSI bit, SCLK low
+    in pins, 1    side 1 [1]   ; sample MISO bit, SCLK high
+.wrap
