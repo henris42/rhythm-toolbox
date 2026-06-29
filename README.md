@@ -38,7 +38,6 @@ lib/
   machine.*  toolbox.h   the framework + public API
 examples/
   basic_drums.cpp     copy & edit this — declare voices, run()
-  led_color_test.cpp  LED/colour diagnostic
 docs/
   io-map.md           full hardware pin/IO map (source of truth)
 ```

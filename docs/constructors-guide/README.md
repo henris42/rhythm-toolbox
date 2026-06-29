@@ -171,8 +171,8 @@ MidiMsg msg; while (midi_read(&msg)) { ... }
 uint32_t ticks = io_sync_ticks();     // 24-PPQN external clock count
 ```
 
-See [`led_color_test.cpp`](../../examples/led_color_test.cpp) for a minimal app
-that uses the low-level `leds` API directly.
+These low-level calls are also available from `on_step` hooks in your app, or in
+a fully custom `main()` that drives `io_init()` / `io_process()` directly.
 
 ---
 
