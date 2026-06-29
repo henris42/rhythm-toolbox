@@ -17,6 +17,18 @@ example file**.
 - **MIDI over both DIN (UART) and USB** (class-compliant; the device also exposes
   a USB serial port + picotool reset).
 
+## Documentation
+
+- **[Musician's Guide](docs/musicians-guide/)** — play a machine running the default
+  firmware (no coding).
+- **[Vibe Coder's Guide](docs/vibe-coders-guide/)** — customize your machine by
+  editing the example with an AI assistant.
+- **[Constructor's Guide](docs/constructors-guide/)** — architecture, build/flash,
+  the full API, and writing your own machine.
+- **[IO Map](docs/io-map.md)** — the hardware pin/IO reference (source of truth).
+- **[AGENTS.md](AGENTS.md)** — orientation for AI agents / contributors working on
+  the codebase.
+
 ## Layout
 
 ```
