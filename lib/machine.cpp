@@ -49,7 +49,7 @@ void Machine::voice_fire(uint8_t track, bool accent, bool send_midi) {
 
 void Machine::fire_step(uint8_t step) {
     // S18 held = fill: play the dedicated fill pattern (last slot) instead.
-    uint8_t pat = input_held(18) ? (uint8_t)(SEQ_PATTERNS - 1) : cur_pat_;
+    const uint8_t pat = input_held(18) ? kFillPat : cur_pat_;
     for (uint8_t t = 0; t < ntracks_; t++) {
         StepState st = seq_.get(pat, t, step);
         if (st != STEP_OFF) voice_fire(t, st == STEP_ACCENT, /*send_midi=*/true);
@@ -100,7 +100,7 @@ void Machine::handle(const InputEvent &e) {
         break;
     case InputEventType::PotChanged:
         if (e.id == 2) clock_.set_tempo(40.0f + e.value * 200.0f / 4095.0f);  // A1
-        else if (e.id == 1) clock_.set_swing((uint8_t)(50 + e.value * 25 / 4095)); // A0
+        else if (e.id == 1) clock_.set_swing(static_cast<uint8_t>(50 + e.value * 25 / 4095)); // A0
         break;
     case InputEventType::StartChanged:
         if (e.value) clock_.toggle();                      // external start in

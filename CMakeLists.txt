@@ -37,6 +37,16 @@ add_library(toolbox STATIC
 )
 pico_generate_pio_header(toolbox ${CMAKE_CURRENT_LIST_DIR}/lib/hal/shiftio.pio)
 target_include_directories(toolbox PUBLIC lib lib/hal lib/core)
+
+# Embedded C++ hygiene: no exceptions/RTTI (smaller, deterministic; we don't use
+# them), no thread-safe static guards (single init context), and warnings on.
+# PUBLIC so example apps build the same way.
+target_compile_options(toolbox PUBLIC
+    $<$<COMPILE_LANGUAGE:CXX>:-fno-exceptions>
+    $<$<COMPILE_LANGUAGE:CXX>:-fno-rtti>
+    $<$<COMPILE_LANGUAGE:CXX>:-fno-threadsafe-statics>
+    -Wall -Wextra
+)
 target_link_libraries(toolbox PUBLIC
     pico_stdlib
     hardware_pio

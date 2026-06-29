@@ -24,7 +24,7 @@ volatile uint16_t s_head = 0;   // write index (ISR)
 volatile uint16_t s_tail = 0;   // read index (main)
 
 void enqueue(const InputEvent &e) {
-    uint16_t next = (uint16_t)((s_head + 1) % QCAP);
+    const uint16_t next = static_cast<uint16_t>((s_head + 1) % QCAP);
     if (next == s_tail) return;   // full: drop (shouldn't happen at 2 kHz)
     s_q[s_head] = e;
     s_head = next;
@@ -51,7 +51,7 @@ bool on_tick(repeating_timer_t *) {
     input_decode(in, enqueue);
     extio_update();   // clear any expired output pulses
 
-    uint8_t p = (uint8_t)(s_phase + 1);
+    const uint8_t p = static_cast<uint8_t>(s_phase + 1);
     s_phase = (p >= LED_PWM_STEPS) ? 0 : p;
     return true;   // keep repeating
 }
@@ -84,7 +84,7 @@ void io_init() {
 void io_process(InputHandler handler) {
     while (s_tail != s_head) {
         InputEvent e = s_q[s_tail];
-        s_tail = (uint16_t)((s_tail + 1) % QCAP);
+        s_tail = static_cast<uint16_t>((s_tail + 1) % QCAP);
         handler(e);
     }
 }

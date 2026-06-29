@@ -13,7 +13,7 @@ void Clock::init() {
 }
 
 uint32_t Clock::step_us_() const {
-    return (uint32_t)(60000000.0f / (bpm_ * 4.0f));   // quarter / 4 = 16th
+    return static_cast<uint32_t>(60000000.0f / (bpm_ * 4.0f));  // quarter / 4 = 16th
 }
 
 void Clock::set_tempo(float bpm) {
@@ -48,25 +48,25 @@ bool Clock::poll(uint8_t *step) {
 
     if (external_) {
         // 24 PPQN -> 6 ticks per 16th note.
-        if ((uint32_t)(io_sync_ticks() - sync_base_) >= 6) {
+        if (static_cast<uint32_t>(io_sync_ticks() - sync_base_) >= 6) {
             sync_base_ += 6;
-            step_ = (uint8_t)((step_ + 1) & 15);
+            step_ = static_cast<uint8_t>((step_ + 1) & 15);
             *step = step_;
             return true;
         }
         return false;
     }
 
-    uint32_t now = time_us_32();
-    if ((int32_t)(now - next_us_) >= 0) {
-        step_ = (uint8_t)((step_ + 1) & 15);
+    const uint32_t now = time_us_32();
+    if (static_cast<int32_t>(now - next_us_) >= 0) {
+        step_ = static_cast<uint8_t>((step_ + 1) & 15);
         *step = step_;
         // Swing: even steps dwell longer, odd steps shorter (delays the
         // off-beat 16ths). s = 0 at 50%, 0.5 at 75%.
-        float s = (swing_ - 50) / 50.0f;
-        uint32_t T = step_us_();
-        uint32_t dwell = (step_ & 1) ? (uint32_t)(T * (1.0f - s))
-                                     : (uint32_t)(T * (1.0f + s));
+        const float s = (swing_ - 50) / 50.0f;
+        const uint32_t T = step_us_();
+        const uint32_t dwell = (step_ & 1) ? static_cast<uint32_t>(T * (1.0f - s))
+                                           : static_cast<uint32_t>(T * (1.0f + s));
         next_us_ = now + dwell;
         return true;
     }

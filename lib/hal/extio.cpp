@@ -37,9 +37,9 @@ void extio_pulse(ExtOut o, uint32_t len_us) {
 }
 
 void extio_update() {
-    uint32_t now = time_us_32();
+    const uint32_t now = time_us_32();
     for (int i = 0; i < NUM_EXT_OUT; i++) {
-        if (s_pulsing[i] && (int32_t)(now - s_pulse_end[i]) >= 0) {
+        if (s_pulsing[i] && static_cast<int32_t>(now - s_pulse_end[i]) >= 0) {
             gpio_put(kPins[i], 0);
             s_pulsing[i] = false;
         }

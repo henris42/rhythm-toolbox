@@ -13,8 +13,8 @@
 //
 #include <cstdint>
 
-#define NUM_LEDS       16
-#define LED_PWM_STEPS  128   // PWM duty resolution / phases (refresh = tick/STEPS)
+inline constexpr unsigned NUM_LEDS      = 16;
+inline constexpr uint8_t  LED_PWM_STEPS = 128;  // PWM duty resolution / phases
 
 enum LedColor : uint8_t {
     LED_OFF    = 0,

@@ -60,7 +60,7 @@ void midi_init() {
 
 bool midi_read(MidiMsg *m) {
     while (uart_is_readable(MIDI_UART))
-        if (feed(s_uart, (uint8_t)uart_getc(MIDI_UART), m)) return true;
+        if (feed(s_uart, static_cast<uint8_t>(uart_getc(MIDI_UART)), m)) return true;
 #if TOOLBOX_USB_MIDI
     uint8_t b;
     while (tud_midi_available() && tud_midi_stream_read(&b, 1))

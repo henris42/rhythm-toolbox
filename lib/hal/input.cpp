@@ -157,7 +157,7 @@ void input_decode(const uint8_t *buf, InputHandler handler) {
         s_start_time = t;
         for (uint8_t i = 0; i < NUM_POT; i++) {
             uint16_t raw = pot_raw(i);
-            s_pot_acc[i] = (uint32_t)raw << kPotEmaShift;   // seed EMA
+            s_pot_acc[i] = static_cast<uint32_t>(raw) << kPotEmaShift;   // seed EMA
             s_pot[i] = raw;
         }
         s_primed = true;
@@ -170,7 +170,7 @@ void input_decode(const uint8_t *buf, InputHandler handler) {
             s_pressed[i] = now[i];
             s_btn_time[i] = t;
             if (now[i]) {
-                InputEvent e{InputEventType::ButtonPressed, (uint8_t)(i + 1), 0};
+                InputEvent e{InputEventType::ButtonPressed, static_cast<uint8_t>(i + 1), 0};
                 handler(e);
             }
         }
@@ -183,7 +183,7 @@ void input_decode(const uint8_t *buf, InputHandler handler) {
         } else if (rot[i] == s_rot_cand[i]) {
             if ((t - s_rot_time[i]) >= kRotDebounceMs) {
                 s_rotary[i] = rot[i];
-                InputEvent e{InputEventType::RotaryChanged, (uint8_t)(i + 1), rot[i]};
+                InputEvent e{InputEventType::RotaryChanged, static_cast<uint8_t>(i + 1), rot[i]};
                 handler(e);
             }
         } else {
@@ -197,8 +197,8 @@ void input_decode(const uint8_t *buf, InputHandler handler) {
         if (sw[i] != s_sw[i] && (t - s_sw_time[i]) >= kSwDebounceMs) {
             s_sw[i] = sw[i];
             s_sw_time[i] = t;
-            InputEvent e{InputEventType::SwitchChanged, (uint8_t)(i + 1),
-                         (uint16_t)(sw[i] ? 1 : 0)};
+            InputEvent e{InputEventType::SwitchChanged, static_cast<uint8_t>(i + 1),
+                         static_cast<uint16_t>(sw[i] ? 1 : 0)};
             handler(e);
         }
     }
@@ -207,7 +207,7 @@ void input_decode(const uint8_t *buf, InputHandler handler) {
     if (start != s_start && (t - s_start_time) >= kStartDebounceMs) {
         s_start = start;
         s_start_time = t;
-        InputEvent e{InputEventType::StartChanged, 1, (uint16_t)(start ? 1 : 0)};
+        InputEvent e{InputEventType::StartChanged, 1, static_cast<uint16_t>(start ? 1 : 0)};
         handler(e);
     }
 
@@ -219,10 +219,10 @@ void input_decode(const uint8_t *buf, InputHandler handler) {
             // EMA: acc holds (filtered << shift). Written as -decay +raw to
             // avoid unsigned underflow when raw < the filtered value.
             s_pot_acc[i] = s_pot_acc[i] - (s_pot_acc[i] >> kPotEmaShift) + raw;
-            uint16_t v = (uint16_t)(s_pot_acc[i] >> kPotEmaShift);   // 12-bit
-            if (std::abs((int)v - (int)s_pot[i]) >= kPotDeadband) {
+            const uint16_t v = static_cast<uint16_t>(s_pot_acc[i] >> kPotEmaShift);   // 12-bit
+            if (std::abs(static_cast<int>(v) - static_cast<int>(s_pot[i])) >= kPotDeadband) {
                 s_pot[i] = v;
-                InputEvent e{InputEventType::PotChanged, (uint8_t)(i + 1), v};
+                InputEvent e{InputEventType::PotChanged, static_cast<uint8_t>(i + 1), v};
                 handler(e);
             }
         }
